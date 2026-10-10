@@ -1,128 +1,108 @@
-# 8-Bit SAP Computer Architecture
+# 8-Bit SAP Computer Architecture Using Verilog HDL
 
 ## 1. Project Overview
 
-This project focuses on designing an 8-bit SAP (Simple-As-Possible) computer architecture using Verilog HDL. The design is organized into separate modules that work together to execute instructions and process 8-bit data.
+This project implements an 8-bit SAP (Simple-As-Possible) computer architecture using Verilog HDL, with FPGA implementation as the target platform.
 
-The project is intended for FPGA implementation and demonstrates the fundamental concepts of computer architecture and digital system design.
+The design demonstrates the fundamental working principles of a processor, including instruction fetching, instruction decoding, arithmetic and logical operations, memory access, register transfers, and control-unit sequencing.
+
+The architecture uses a shared 8-bit data bus to transfer information between the processor's registers, memory, and input/output components. A finite state machine (FSM)-based control unit generates control signals to coordinate instruction execution over multiple clock cycles.
 
 ## 2. Project Objectives
 
-- Understand the internal working of a simple computer.
-- Design individual hardware modules using Verilog HDL.
-- Connect the modules to form a complete computer architecture.
-- Implement an instruction execution process using a control unit.
-- Verify the design through simulation before FPGA implementation.
+- To understand the fundamental organization and operation of a processor.
+- To implement an 8-bit datapath using Verilog HDL.
+- To design registers, memory, an arithmetic logic unit (ALU), and a control unit.
+- To implement instruction execution using clocked control states.
+- To demonstrate arithmetic, logical, memory, branching, and input/output operations.
+- To verify the design through simulation and, where completed, FPGA implementation.
+- To display numerical output using a seven-segment display interface.
 
 ## 3. Architecture Components
 
-| Component | Purpose |
+The design includes the following modules:
+
+| Component | Function |
 |---|---|
-| Program Counter (PC) | Holds the address of the next instruction. |
-| Memory Address Register (MAR) | Holds the memory address being accessed. |
-| RAM | Stores program instructions and data. |
-| Instruction Register (IR) | Holds the current instruction. |
-| A Register | Stores an operand and arithmetic or logic results. |
-| B Register | Stores another operand for ALU operations. |
-| ALU | Performs arithmetic and logical operations. |
-| Data Bus | Transfers data between components. |
-| Flag Register | Stores status flags used by the control logic. |
-| Control Unit | Generates control signals to coordinate instruction execution. |
-| Input Port | Provides external input data. |
+| Program Counter (PC) | Holds the address of the next instruction to fetch. |
+| Memory Address Register (MAR) | Holds the address used to access memory. |
+| RAM (16 × 8) | Stores 16 words, each 8 bits wide. |
+| Instruction Register (IR) | Stores the current instruction and provides its opcode and operand fields. |
+| A Register | Stores the accumulator value and ALU result. |
+| B Register | Stores the second operand for ALU operations. |
+| Arithmetic Logic Unit (ALU) | Performs arithmetic, logical, and shift operations. |
+| Flag Register | Stores carry and zero flags. |
+| Control Unit | Generates control signals and sequences instruction execution. |
+| Input Register Interface | Places external input data onto the shared bus. |
 | Output Register | Stores data for output display. |
+| Clock Divider | Generates a slower clock from the input clock. |
+| Display Controller | Selects display digits and converts an 8-bit value into decimal digits. |
+| Seven-Segment Decoder | Converts a decimal digit into seven-segment display signals. |
 
-## 4. Working Principle
+## 4. Instruction Set
 
-The computer follows an instruction execution process:
+The control unit defines 16 four-bit opcode values.
 
-1. **Fetch:** The instruction is read from memory.
-2. **Decode:** The control unit identifies the operation to perform.
-3. **Execute:** The required registers, ALU, memory, or input/output components perform the operation.
-4. **Output:** Results can be transferred to the output register for display.
+The instruction set includes data transfer, arithmetic, logical, shift, branching, input/output, comparison, and halt operations.
 
-The control unit uses timing states to coordinate these operations.
+The exact instruction encodings and supported execution behavior are documented in the ISA section of this repository.
 
-## 5. Instruction Set
+## 5. Instruction Execution
 
-The current design includes the following planned instruction operations:
+Instruction execution is controlled by a finite state machine with the following states:
 
-| Instruction | Intended purpose |
-|---|---|
-| NOP | No operation |
-| LDA | Load data into the A register |
-| STA | Store data in memory |
-| ADD | Add operands |
-| SUB | Subtract operands |
-| AND | Perform bitwise AND |
-| XOR | Perform bitwise XOR |
-| SFL | Shift data left |
-| SFR | Shift data right |
-| OUT | Send data to the output register |
-| JMP | Jump to an address |
-| JZ | Jump when the zero condition is satisfied |
-| JC | Jump when the carry condition is satisfied |
-| IN | Read external input data |
-| HLT | Halt instruction execution |
-| CMP | Compare operands |
+- **IDL:** Waits for the start signal.
+- **T1:** Places the program counter value on the bus and loads the memory address register.
+- **T2:** Reads the selected memory word into the instruction register.
+- **T3:** Increments the program counter.
+- **T4:** Decodes the opcode and initiates the required operation.
+- **T5:** Performs additional operand-addressing, memory, or register-transfer operations.
+- **T6:** Performs the selected ALU operation or comparison.
+- **HALT:** Holds the processor in its halted state.
 
-**Note:** The instruction behavior and opcode assignments must be checked against the implemented control-unit code and verified through simulation.
+Not every instruction uses all these states. The control unit determines the required sequence according to the opcode.
 
-## 6. Control Unit
+## 6. Design Methodology
 
-The control unit coordinates the computer's internal operations by generating control signals.
+The design follows a modular RTL development approach:
 
-The current design uses timing states named `IDL`, `T1`, `T2`, `T3`, `T4`, `T5`, `T6`, and `HALT`. The required states and control signals depend on the instruction being executed.
+1. Develop the individual processor components using Verilog HDL.
+2. Integrate the components through a shared data bus and control signals.
+3. Coordinate instruction execution using an FSM-based control unit.
+4. Verify individual modules and processor-level instruction sequences through simulation.
+5. Integrate the design with the target FPGA and its input/output peripherals, where supported.
 
-## 7. Verilog Modules
-
-The design is divided into separate modules:
-
-- `main.v` — Top-level integration of the computer.
-- `program_counter.v` — Program counter.
-- `mar.v` — Memory address register.
-- `ram_16x8.v` — Memory module.
-- `instruction_register.v` — Instruction register.
-- `a_register.v` — A register.
-- `b_register.v` — B register.
-- `alu.v` — Arithmetic and logic unit.
-- `data_bus.v` — Shared data bus.
-- `flag_register.v` — Status flag storage.
-- `control_unit.v` — Instruction control and timing.
-- `input_port.v` — External input interface.
-- `output_register.v` — Output data storage.
-- `clock_divider.v` — Clock division logic.
-- `button_pulse.v` — Button pulse generation.
-- `run_control.v` — Run-control logic.
-
-## 8. Tools and Technologies
+## 7. Tools and Technologies
 
 - Verilog HDL
-- FPGA development tools
-- Verilog simulation and testbenches
-- GitHub for source-code management and documentation
+- RTL design
+- Finite State Machine (FSM)
+- Digital logic design
+- HDL simulation and waveform analysis
+- FPGA implementation tools, depending on the target board
 
-## 9. Verification
+## 8. Project Status
 
-Each hardware module should be compiled and tested independently before integration.
+The project contains modular Verilog descriptions of the processor datapath, control unit, memory interface, and display logic.
 
-The verification process is:
+Simulation results, verified instruction behavior, and FPGA implementation evidence will be recorded as the corresponding tests and hardware demonstrations are completed.
 
-**Module → Compile → Testbench → Simulation → Pass → Next Module**
+## 9. Team Contributions
 
-After individual modules pass their tests, the integrated design should be tested with representative instructions, including arithmetic, memory access, branching, input/output, and halt operations.
+This is a collaborative three-member project. The team shares responsibility for architecture design, RTL development, verification, integration, and documentation.
 
-## 10. Current Project Status
+Individual contributions will be recorded in the project repository.
 
-**Status: Under Development and Verification**
+## 10. Future Improvements
 
-The modules and their connections are being reviewed and tested. The complete instruction execution flow and FPGA behavior will be confirmed through simulation and hardware testing.
+- Expand instruction-level and processor-level verification.
+- Improve flag handling and conditional instruction testing.
+- Add debugging support for internal registers and control states.
+- Improve the demonstration interface and document measured FPGA results.
 
-## 11. Team Contributions
+---
 
-- **Documentation and integration:** Maintaining project documentation and organizing the repository.
-- **RTL development:** Reviewing and developing the Verilog modules.
-- **Verification:** Preparing testbenches and checking simulation results.
-
-## 12. Conclusion
-
-This project demonstrates the design of a simple 8-bit computer using modular Verilog coding. It provides practical experience with registers, memory, an ALU, a shared bus, instruction execution, control signals, and FPGA-oriented design.
+**Project:** 8-Bit SAP Computer Architecture  
+**Hardware Description Language:** Verilog HDL  
+**Design Approach:** Modular RTL design with FSM-based control  
+**Target:** FPGA implementation
