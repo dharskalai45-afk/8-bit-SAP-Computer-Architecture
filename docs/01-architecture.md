@@ -74,10 +74,3 @@ The control unit defines the following states:
 
 The exact sequence depends on the instruction being executed.
 
-## 5. Design Verification
-
-The architecture should be verified through module-level and processor-level simulation. Verification evidence should be added after the corresponding tests have been executed successfully.
-
-## 6. Implementation Status
-
-The Verilog source code defines the processor components and control-unit behavior. Successful simulation and FPGA implementation must be recorded separately after verification.
