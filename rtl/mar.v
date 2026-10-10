@@ -1,18 +1,15 @@
+`timescale 1ns / 1ps
+
 module mar(
-input clk,
-input rst,
-input mi,
-input [7:0] bus,
-output reg [3:0] addr
-);
-
-always @(posedge clk or posedge rst)
-begin
-if (rst)
-addr <= 4'b0000;
-else if (mi)
-addr <= bus[3:0];
+input clk,rst,mi,
+input [7:0]bus,
+output [3:0]addr);
+reg [3:0] mar;
+always @ (posedge clk or posedge rst) begin
+if(rst)
+mar <= 4'b0000;
+else if(mi)
+mar <= bus[3:0];
 end
-
+assign addr = mar;
 endmodule
-
