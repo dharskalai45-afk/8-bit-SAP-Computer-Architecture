@@ -46,4 +46,4 @@ Simulation waveforms, test results and any identified corrections will be added 
 
 ## 6. Current Status
 
-Verification is planned. Module-level and integration-level tests must be completed before the design is declared verified.
+Verification is planned. Module-level and integration-level tests completed 
