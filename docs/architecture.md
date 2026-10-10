@@ -8,15 +8,14 @@ This project implements an 8-bit Simple-As-Possible (SAP) computer architecture 
 
  Component                       Specification 
 
-| Data bus                      | 8 bits |
-| Program counter               | 4 bits |
-| Instruction register          | 8 bits |
-| Opcode                        | 4 bits |
-| Operand                       | 4 bits |
-| RAM                           | 16 × 8 bits |
-| Control unit                  | Finite State Machine (FSM) |
-| Hardware description language | Verilog HDL |
-
+ Data bus                       8 bits 
+ Program counter                4 bits 
+ Instruction register           8 bits 
+ Opcode                         4 bits 
+ Operand                        4 bits 
+ RAM                            16 × 8 bits 
+ Control unit                   Finite State Machine (FSM) 
+ Hardware description language  Verilog HDL
 ## 3. Major Components
 
 - **Program Counter (PC):** Maintains the instruction address.
