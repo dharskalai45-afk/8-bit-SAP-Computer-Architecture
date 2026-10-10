@@ -15,35 +15,39 @@ module alu (
     input sfri
 );
 
-   always @(*) begin
-    res   = 8'h00;
-    carry = 1'b0;
-    zero  = 1'b0;
+    reg [8:0] temp;
 
-    if (sub) begin
-        res   = a - b;
-        carry = (a < b);
-    end
-    else if (rox) begin
-        res = a ^ b;
-    end
-    else if (dna) begin
-        res = a & b;
-    end
-    else if (sfli) begin
-        res   = a << 1;
-        carry = a[7];
-    end
-    else if (sfri) begin
-        res   = a >> 1;
-        carry = a[0];
-    end
-    else begin
-        res   = a + b;
-        carry = (res < a);
-    end
+    always @(*) begin
+        res   = 8'h00;
+        carry = 1'b0;
+        zero  = 1'b0;
+        temp  = 9'h000;
 
-    zero = (res == 8'h00);
-end
+        if (sub) begin
+            res   = a - b;
+            carry = (a < b);  // 1 means borrow
+        end
+        else if (rox) begin
+            res = a ^ b;
+        end
+        else if (dna) begin
+            res = a & b;
+        end
+        else if (sfli) begin
+            res   = a << 1;
+            carry = a[7];
+        end
+        else if (sfri) begin
+            res   = a >> 1;
+            carry = a[0];
+        end
+        else begin
+            temp  = {1'b0, a} + {1'b0, b};
+            res   = temp[7:0];
+            carry = temp[8];
+        end
+
+        zero = (res == 8'h00);
+    end
 
 endmodule
