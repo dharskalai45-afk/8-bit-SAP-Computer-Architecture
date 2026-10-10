@@ -12,20 +12,20 @@ Each module will be tested independently using a Verilog testbench and simulatio
 
 | Module | Planned checks | Status |
 |---|---|---|
-| Program Counter | Reset, increment, load | Not tested |
-| MAR | Address loading | Not tested |
-| RAM | Read and write operations | Not tested |
-| Instruction Register | Instruction loading and opcode extraction | Not tested |
-| A Register | Load and bus output | Not tested |
-| B Register | Load and data output | Not tested |
-| ALU | Addition, subtraction, AND, XOR and shifts | Not tested |
-| Flag Register | Carry and zero flag updates | Not tested |
-| Control Unit | Instruction sequencing and control signals | Not tested |
-| Input Register | External input loading | Not tested |
-| Output Register | Output data capture | Not tested |
-| Seven-Segment Display | Digit decoding | Not tested |
-| Display Control | Display refresh and digit selection | Not tested |
-| Clock Divider | Clock division and reset | Not tested |
+| Program Counter | Reset, increment, load | tested |
+| MAR | Address loading |  tested |
+| RAM | Read and write operations |  tested |
+| Instruction Register | Instruction loading and opcode extraction | tested |
+| A Register | Load and bus output |tested |
+| B Register | Load and data output |  tested |
+| ALU | Addition, subtraction, AND, XOR and shifts | tested |
+| Flag Register | Carry and zero flag updates |  tested |
+| Control Unit | Instruction sequencing and control signals |  tested |
+| Input Register | External input loading |  tested |
+| Output Register | Output data capture |  tested |
+| Seven-Segment Display | Digit decoding |  tested |
+| Display Control | Display refresh and digit selection |  tested |
+| Clock Divider | Clock division and reset |  tested |
 | Top-Level Integration | Complete instruction execution | Not tested |
 
 ## 4. Integration Tests
